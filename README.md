@@ -1,119 +1,350 @@
-Android File Exfiltration — Security Research Demo
+## Android File Exfiltration — Security Research Demo
 
-«⚠️ Educational / Defensive Security Research Only»
+«⚠️ Educational & Defensive Cybersecurity Research Only»
 
-This repository demonstrates how a malicious Android Python script can enumerate files from accessible storage and attempt to transfer them to a remote Telegram bot.
+A controlled security-research project demonstrating how Android malware can enumerate accessible files and attempt data exfiltration through a remote communication channel.
 
-The project is intended for malware analysis, cybersecurity education, and controlled lab environments only.
+This repository is intended for malware analysis, cybersecurity education, Android security research, and detection engineering.
 
-What This Demo Shows
+---
 
-The original proof-of-concept demonstrates a common data-exfiltration pattern:
+## Overview
 
-1. Detect the Android environment.
-2. Identify commonly used storage directories.
-3. Enumerate files inside those directories.
-4. Read accessible files.
-5. Transfer files to a remote Telegram bot.
-6. Report errors through the same communication channel.
+Modern Android malware may attempt to collect files from shared storage and transmit them to an external server or messaging service.
 
-This behavior can be considered malicious when performed without the device owner's explicit authorization.
+This project demonstrates the behavioral concept in a controlled research environment so that security researchers can understand:
 
-Why It Matters
+- File enumeration
+- Android shared-storage access
+- Data collection
+- Data-exfiltration patterns
+- Remote communication
+- Malware indicators
+- Defensive detection techniques
 
-File-stealing malware does not necessarily need sophisticated exploitation techniques.
+«Never test against a device or data that you do not own or have explicit permission to analyze.»
 
-A seemingly ordinary Python script can become dangerous when it:
+---
 
-- accesses personal storage;
-- searches multiple directories automatically;
-- sends collected files to an external service;
-- operates without the user's knowledge or consent.
+## How the Attack Pattern Works
 
-Understanding this behavior helps security researchers recognize and investigate data-exfiltration techniques.
+A typical file-exfiltration workflow can look like this:
 
-Important Safety Notice
+┌─────────────────────┐
+│   Android Device    │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ Storage Enumeration │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  File Identification│
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   Data Collection   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ External Network    │
+│     Destination     │
+└─────────────────────┘
 
-Do not deploy this project against devices, accounts, files, or networks that you do not own or have explicit permission to test.
+The important security concern is not the programming language itself, but the combination of:
 
-Do not use it to:
+File Access
+     +
+Automatic Enumeration
+     +
+Network Communication
+     =
+Potential Data Exfiltration
 
-- steal personal files;
-- collect credentials;
-- bypass Android permissions;
-- hide malicious behavior from users;
-- maintain unauthorized persistence;
-- compromise another person's device.
+---
 
-For safe experimentation, use an Android emulator or a dedicated test device containing synthetic files.
+## Example Storage Locations
 
-Safe Lab Setup
+Android devices can contain user files in locations such as:
 
-A recommended research environment is:
+/storage/emulated/0/DCIM/
+/storage/emulated/0/Pictures/
+/storage/emulated/0/Movies/
+/storage/emulated/0/Music/
+/storage/emulated/0/Download/
+/storage/emulated/0/Documents/
+/storage/emulated/0/Screenshots/
 
-Android Emulator / Test Phone
-          │
-          ▼
-   Synthetic Test Files
-          │
-          ▼
-   Security Research Script
-          │
-          ▼
-      Test Endpoint
+The exact accessibility of these locations depends on the Android version, application permissions, storage model, and user authorization.
 
-Use fake documents such as:
+---
+
+## Simplified Research Example
+
+The following example demonstrates local file enumeration only.
+
+It does not upload files or transmit them anywhere.
+
+from pathlib import Path
+
+TEST_DIRECTORY = Path("./lab")
+
+for file_path in TEST_DIRECTORY.rglob("*"):
+    if file_path.is_file():
+        print(f"[FILE] {file_path}")
+
+Example output:
+
+[FILE] lab/test-image.jpg
+[FILE] lab/dummy-document.pdf
+[FILE] lab/sample-data.txt
+
+This allows researchers to study the enumeration behavior without collecting real personal data.
+
+---
+
+## Safe Laboratory Environment
+
+Use an Android emulator or a dedicated test device.
+
+Create synthetic files such as:
 
 lab/
 ├── test-image.jpg
-├── fake-document.pdf
+├── dummy-document.pdf
 ├── sample-video.mp4
-└── dummy-data.txt
+└── fake-data.txt
 
-Do not place real personal documents, passwords, private photos, tokens, or credentials in the test environment.
+Do not use:
 
-Detection Ideas
+Real photographs
+Real documents
+Passwords
+API keys
+Session tokens
+Private messages
+Personal recordings
+Financial information
+Other people's data
 
-From a defensive perspective, investigate applications or scripts that unexpectedly:
+---
 
-- access large numbers of files;
-- enumerate multiple storage directories;
-- perform repeated outbound network requests;
-- communicate with Telegram or other external messaging APIs;
-- upload files without an obvious user-initiated action.
+## Detection Opportunities
 
-A useful investigation workflow is:
+Security analysts can investigate suspicious applications or scripts that:
+
+- Enumerate large numbers of files
+- Access many unrelated directories
+- Read files without an obvious user action
+- Generate unusual outbound traffic
+- Contact unexpected external services
+- Repeatedly transfer files
+- Operate in the background
+- Attempt to hide their network activity
+
+A useful investigation model is:
 
 Process
-  ↓
-File-system activity
-  ↓
-Network activity
-  ↓
-Destination/domain
-  ↓
-Uploaded data
-  ↓
-Timeline
+   │
+   ▼
+File-System Activity
+   │
+   ▼
+Network Activity
+   │
+   ▼
+Destination
+   │
+   ▼
+Transferred Data
+   │
+   ▼
+Timeline / Attribution
 
+---
 
-Research Goals
+## Indicators of Suspicious Behavior
 
-This repository can be used to study:
+Potential indicators include:
 
-- Android storage access
-- File enumeration
-- Data-exfiltration techniques
-- Telegram-based command-and-control concepts
-- Malware indicators
-- Network traffic analysis
-- Incident-response methodology
-- Defensive detection strategies
+• Unexpected storage access
+• Large numbers of file reads
+• Repeated outbound connections
+• Unusual background network activity
+• Unexpected messaging/API traffic
+• Automated file transfers
+• Access to directories unrelated to application functionality
 
-Disclaimer
+A single indicator does not necessarily mean malware is present. Analysts should correlate multiple observations.
 
-The author does not encourage unauthorized access, surveillance, credential theft, privacy violations, or data exfiltration.
+---
 
-Use this material only in environments where you have explicit authorization to conduct security research.
+## Android Security Considerations
 
-If you are analyzing malware, focus on understanding its behavior and detecting it—not deploying it against unsuspecting users.
+Android security has changed significantly across versions.
+
+Relevant concepts include:
+
+Storage Permissions
+Scoped Storage
+Application Sandboxing
+Runtime Permissions
+Shared Storage
+Background Execution
+Network Security
+Application Signing
+
+Therefore, a script that works in one Android environment may not behave the same way on another device.
+
+---
+
+## Malware Analysis Workflow
+
+A controlled analysis can follow this workflow:
+
+1. Obtain sample
+        ↓
+2. Isolate environment
+        ↓
+3. Observe permissions
+        ↓
+4. Monitor file-system activity
+        ↓
+5. Monitor network activity
+        ↓
+6. Identify destinations
+        ↓
+7. Record indicators
+        ↓
+8. Create detection rules
+
+---
+
+## Repository Structure
+
+android-file-exfiltration-research/
+│
+├── README.md
+│
+├── src/
+│   └── demo.py
+│
+├── samples/
+│   └── README.md
+│
+├── docs/
+│   ├── analysis.md
+│   ├── detection.md
+│   └── android-security.md
+│
+├── screenshots/
+│   └── README.md
+│
+├── LICENSE
+│
+└── .gitignore
+
+---
+
+## Research Topics
+
+This repository covers concepts related to:
+
+Android Security
+Android Malware
+Malware Analysis
+Data Exfiltration
+File Enumeration
+Cybersecurity Research
+Threat Detection
+Incident Response
+Digital Forensics
+Network Analysis
+Python Security Research
+Mobile Security
+Defensive Security
+
+---
+
+## Keywords
+
+For research and search purposes:
+
+android malware analysis
+android security research
+android file enumeration
+android data exfiltration
+android malware detection
+mobile malware analysis
+python malware analysis
+cybersecurity research
+mobile security
+android storage security
+data exfiltration detection
+malware behavior analysis
+threat detection
+digital forensics
+incident response
+security research
+defensive cybersecurity
+
+---
+
+## Disclaimer
+
+This repository is provided strictly for:
+
+Educational Research
+Malware Analysis
+Security Testing
+Detection Engineering
+Controlled Laboratory Experiments
+
+Do not use this project to access, collect, monitor, or transfer data from devices without explicit authorization.
+
+The author does not support:
+
+- Unauthorized access
+- Privacy violations
+- Credential theft
+- Data theft
+- Covert surveillance
+- Unauthorized persistence
+- Deployment against unsuspecting users
+
+Use an emulator, disposable test device, or isolated laboratory environment for experimentation.
+
+---
+
+## Responsible Use
+
+If you discover an application performing unauthorized file collection:
+
+1. Disconnect the affected device from untrusted networks.
+2. Preserve relevant evidence.
+3. Review application permissions.
+4. Analyze network connections.
+5. Identify suspicious processes.
+6. Remove or isolate the application when appropriate.
+7. Change potentially exposed credentials.
+8. Report the incident through the appropriate channel.
+
+---
+
+## License
+
+This project is intended for security research and educational purposes.
+
+See "LICENSE" for the applicable terms.
+
+---
+
+## Final Note
+
+Understanding how data-exfiltration malware behaves is an important part of defensive cybersecurity.
+
+The goal of this project is to help researchers recognize, analyze, and detect suspicious behavior in a controlled environment, rather than deploy it against real users.
