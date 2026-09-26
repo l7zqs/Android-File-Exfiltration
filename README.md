@@ -102,11 +102,13 @@ Use an Android emulator or a dedicated test device.
 
 Create synthetic files such as:
 
+```text
 lab/
 ├── test-image.jpg
 ├── dummy-document.pdf
 ├── sample-video.mp4
 └── fake-data.txt
+```
 
 Do not use:
 
@@ -137,6 +139,7 @@ Security analysts can investigate suspicious applications or scripts that:
 
 A useful investigation model is:
 
+```text
 Process
    |
    v
@@ -154,6 +157,7 @@ Transferred Data
    |
    v
 Timeline / Investigation
+```
 
 ## Indicators of Suspicious Behavior
 
