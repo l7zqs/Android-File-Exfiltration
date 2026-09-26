@@ -1,59 +1,48 @@
-## Android File Exfiltration — Security Research Demo
+# Android File Exfiltration — Security Research Demo
 
-«⚠️ Educational & Defensive Cybersecurity Research Only»
+> ⚠️ **Educational & Defensive Cybersecurity Research Only**
 
-A controlled security-research project demonstrating how Android malware can enumerate accessible files and attempt data exfiltration through a remote communication channel.
+A controlled security-research project demonstrating how Android malware may enumerate accessible files and attempt to transfer collected data to an external destination.
 
-This repository is intended for malware analysis, cybersecurity education, Android security research, and detection engineering.
+This repository is intended for **malware analysis, cybersecurity education, Android security research, threat detection, and defensive research**.
 
 ---
 
 ## Overview
 
-Modern Android malware may attempt to collect files from shared storage and transmit them to an external server or messaging service.
+File-exfiltration malware may attempt to:
 
-This project demonstrates the behavioral concept in a controlled research environment so that security researchers can understand:
+- Discover files on a device
+- Enumerate accessible directories
+- Collect selected files
+- Communicate with an external service
+- Transfer collected data outside the device
 
-- File enumeration
-- Android shared-storage access
-- Data collection
-- Data-exfiltration patterns
-- Remote communication
-- Malware indicators
-- Defensive detection techniques
+This project focuses on understanding those behaviors in a controlled laboratory environment.
 
-«Never test against a device or data that you do not own or have explicit permission to analyze.»
+> **Never test against a device, account, network, or data that you do not own or have explicit permission to analyze.**
 
 ---
 
 ## How the Attack Pattern Works
 
-A typical file-exfiltration workflow can look like this:
+A typical file-exfiltration workflow can be represented as:
 
-┌─────────────────────┐
-│   Android Device    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Storage Enumeration │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  File Identification│
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Data Collection   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ External Network    │
-│     Destination     │
-└─────────────────────┘
+```text
+Android Device
+      |
+      v
+Storage Enumeration
+      |
+      v
+File Identification
+      |
+      v
+Data Collection
+      |
+      v
+External Network Destination
+```
 
 The important security concern is not the programming language itself, but the combination of:
 
@@ -221,52 +210,6 @@ A controlled analysis can follow this workflow:
 7. Record indicators
         ↓
 8. Create detection rules
-
----
-
-## Repository Structure
-
-android-file-exfiltration-research/
-│
-├── README.md
-│
-├── src/
-│   └── demo.py
-│
-├── samples/
-│   └── README.md
-│
-├── docs/
-│   ├── analysis.md
-│   ├── detection.md
-│   └── android-security.md
-│
-├── screenshots/
-│   └── README.md
-│
-├── LICENSE
-│
-└── .gitignore
-
----
-
-## Research Topics
-
-This repository covers concepts related to:
-
-Android Security
-Android Malware
-Malware Analysis
-Data Exfiltration
-File Enumeration
-Cybersecurity Research
-Threat Detection
-Incident Response
-Digital Forensics
-Network Analysis
-Python Security Research
-Mobile Security
-Defensive Security
 
 ---
 
