@@ -1,4 +1,4 @@
-# Android File Exfiltration — Security Research Demo
+## Android File Exfiltration — Security Research Demo
 
 > ⚠️ **Educational & Defensive Cybersecurity Research Only**
 
@@ -138,23 +138,22 @@ Security analysts can investigate suspicious applications or scripts that:
 A useful investigation model is:
 
 Process
-   │
-   ▼
+   |
+   v
 File-System Activity
-   │
-   ▼
-Network Activity
-   │
-   ▼
+   |
+   v
+Network Investigation
+ation
+   |
+   v
 Destination
-   │
-   ▼
+   |
+   v
 Transferred Data
-   │
-   ▼
-Timeline / Attribution
-
----
+   |
+   v
+Timeline / Investigation
 
 ## Indicators of Suspicious Behavior
 
@@ -190,29 +189,6 @@ Application Signing
 Therefore, a script that works in one Android environment may not behave the same way on another device.
 
 ---
-
-## Malware Analysis Workflow
-
-A controlled analysis can follow this workflow:
-
-1. Obtain sample
-        ↓
-2. Isolate environment
-        ↓
-3. Observe permissions
-        ↓
-4. Monitor file-system activity
-        ↓
-5. Monitor network activity
-        ↓
-6. Identify destinations
-        ↓
-7. Record indicators
-        ↓
-8. Create detection rules
-
----
-
 ## Keywords
 
 For research and search purposes:
